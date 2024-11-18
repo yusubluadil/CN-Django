@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CN | Detail Blog</title>
+</head>
+<body>
+    <p>{{ blog.id }}</p>
+    <p>{{ blog.author_fullname }}</p>
+    <p>{{ blog.title }}</p>
+    <p>{{ blog.about }}</p>
+    <p>{{ blog.published_date }}</p>
+
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+</body>
+</html>

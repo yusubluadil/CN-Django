@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CN | Blogs</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <h3>
+        <a href="{% url "logout" %}">Logout</a>
+        <a href="{% url "create_blog" %}">Create Blog</a>
+        <a href="{% url "profile" %}">Profile</a>
+    </h3>
+    {% else %}
+    <h3>
+        <a href="{% url "login" %}">Login</a>
+        <a href="{% url "register" %}">Register</a>
+    </h3>
+    {% endif %}
+    <p>---------------------------------------------------</p>
+
+    {% for blog in blogs %}
+    {% if blog.author == user %}
+    <a href="{% url "update_blog" blog.id %}">Update</a><br>
+    <a href="{% url "delete_blog" blog.id %}">Delete</a><br>
+    {% endif %}
+    <a href="{% url "detail_blog" blog.id %}">{{ blog.id }}</a>
+    <p>{{ blog.author_fullname }}</p>
+    <p>{{ blog.title }}</p>
+    <p>{{ blog.published_date }}</p>
+    <p>---------------------------------------------------</p>
+    {% endfor %}
+</body>
+</html>
