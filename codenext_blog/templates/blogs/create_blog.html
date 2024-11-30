@@ -1,21 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CN | Create Blog</title>
-</head>
-<body>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ blog_form.as_p }}
-        <input type="submit">
-    </form>
+{% extends "base/layout.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
-    {% if messages %}
-    {% for message in messages %}
-    <p>{{ message }}</p><br><br>
-    {% endfor %}
-    {% endif %}
-</body>
-</html>
+{% block title %} Create Blog {% endblock title %}
+
+{% block navbar %}{% endblock navbar %}
+
+{% block content %}
+
+<form action="" method="post", enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ blog_form| crispy }}
+    <input type="submit">
+</form>
+
+{% if messages %}
+{% for message in messages %}
+<p>{{ message }}</p><br><br>
+{% endfor %}
+{% endif %}
+
+{% endblock content %}

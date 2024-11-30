@@ -6,6 +6,9 @@
     <title>CN | Detail Blog</title>
 </head>
 <body>
+    {% if blog.image %}
+    <img src="{{ blog.image.url }}" alt="blog-image-{{ blog.id }}" width="250px">
+    {% endif %}
     <p>{{ blog.id }}</p>
     <p>{{ blog.author_fullname }}</p>
     <p>{{ blog.title }}</p>

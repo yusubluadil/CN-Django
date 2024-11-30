@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -49,12 +50,17 @@ def register(request):
         return render(request, 'accounts/register.html', {'creation_form': form})
 
 
+@login_required
 def profile(request):
-    user = request.user
+    user = request.user # orm-de etrafli danis
     profile = Profile.objects.get(user=user)
 
     if request.method == 'POST':
-        ...
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil məlumatları uğurla yeniləndi!')
+            return redirect('profile')
     else:
         form = ProfileForm(instance=profile)
-        return render(request, 'accounts/profile.html', {'profile_form': form})
+        return render(request, 'accounts/profile.html', {'profile_form': form, 'profile': profile})

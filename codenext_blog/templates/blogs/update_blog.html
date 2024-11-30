@@ -6,6 +6,10 @@
     <title>CN | Update Blog</title>
 </head>
 <body>
+    {% if blog.image %}
+    <img src="{{ blog.image.url }}" alt="blog-image-{{ blog.id }}" width="250px">
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

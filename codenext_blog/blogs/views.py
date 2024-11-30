@@ -21,7 +21,7 @@ def all_blogs(request):
 @login_required
 def create_blog(request):
     if request.method == 'POST':
-        form = BlogForm(request.POST)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
             new_form = form.save(commit=False)
             new_form.author = request.user
@@ -58,7 +58,7 @@ def update_blog(request, pk):
     blog = get_object_or_404(blogs, id=pk)
 
     if request.method == 'POST':
-        form = BlogForm(request.POST, instance=blog)
+        form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid():
             form.save()
             return redirect('detail_blog', blog.id) # 127.0.0.1:8000/blogs/detail/5/
@@ -72,7 +72,7 @@ def update_blog(request, pk):
 
 @login_required
 def delete_blog(request, pk):
-    blogs = Blog.objects.filter(author=request.user)
+    blogs = Blog.objects.filter(author=request.user) # orm-de etrafli danis
     blog = get_object_or_404(blogs, id=pk)
     blog.delete()
     messages.success(request, 'Silmə əməliyyatı uğurla icra edildi!')

@@ -35,7 +35,8 @@ class Blog(models.Model):
 
     title = models.CharField(max_length=50)
     about = models.TextField()
-    published_date = models.DateTimeField(null=True, blank=True)
+    published_date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='media', null=True, blank=True)
 
     def __str__(self) -> str:
         try:
@@ -43,4 +44,5 @@ class Blog(models.Model):
         except:
             return f'null <---> {self.title}'
 
-
+# auto_now=True (Hər save metodu çağrıldığında yenilənir.)
+# auto_now_add=True (İlk yaradılan zaman olan tarixi götürür.)

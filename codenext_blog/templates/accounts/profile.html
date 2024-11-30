@@ -12,7 +12,11 @@
     {% endfor %}
     {% endif %}
 
-    <form method='post'>
+    {% if profile.profile_image %}
+    <img src="{{ profile.profile_image.url }}" alt="profile image" width='250px'>
+    {% endif %}
+
+    <form method='post' enctype="multipart/form-data">
         {% csrf_token %}
         {{ profile_form.as_p }}
         <button type="submit" value="Submit">Submit</button>
