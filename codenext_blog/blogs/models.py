@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# TODO: Gelecekde tags hissesini elave et ve userlerden asili hala getir.
+from core.utils.image_size_validator import validate_image
+
 
 """
 OneToOneField - Yəni bir user-in bir blogu ola bilər.
@@ -36,7 +37,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=50)
     about = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='media', null=True, blank=True)
+    image = models.ImageField(upload_to='media', null=True, blank=True, validators=[validate_image])
 
     def __str__(self) -> str:
         try:

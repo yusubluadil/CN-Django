@@ -57,6 +57,7 @@ def profile(request):
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
+        print(request.POST.get('phone_num'))
         if form.is_valid():
             form.save()
             messages.success(request, 'Profil məlumatları uğurla yeniləndi!')

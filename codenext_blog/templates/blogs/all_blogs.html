@@ -8,15 +8,33 @@
 
 {% if messages %}
 {% for message in messages %}
-<p>{{ message }}</p>
+<div class="alert alert-success d-flex justify-content-between" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 {% endfor %}
 {% endif %}
 
 
-<p>---------------------------------------------------</p>
 
+<div class="row">
 {% for blog in blogs %}
-{% if blog.author == user %}
+<div class="col mt-5">
+    <div class="card" style="width: 18rem;">
+        {% if blog.image %}
+        <img src="{{ blog.image.url }}" alt="blog-image-{{ blog.id }}" class="card-img-top" style="width: auto; height: 250px; object-fit: cover;">
+        {% else %}
+        <img src="media/media/default_blog.png" alt="default" style="width: auto; height: 250px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ blog.title }}</h5>
+            <p class="card-text">{{ blog.about }}</p>
+            <a href="{% url "detail_blog" blog.id %}" class="btn btn-primary">Ətraflı</a>
+        </div>
+    </div>
+</div>
+
+{% comment %} {% if blog.author == user %}
 <a href="{% url "update_blog" blog.id %}">Update</a><br>
 <a href="{% url "delete_blog" blog.id %}">Delete</a><br>
 {% endif %}
@@ -26,8 +44,9 @@
 {% endif %}
 <p>{{ blog.author_fullname }}</p>
 <p>{{ blog.title }}</p>
-<p>{{ blog.published_date|date:"d-M-Y H:i" }}</p>
-<p>---------------------------------------------------</p>
+<p>{{ blog.published_date|date:"d-M-Y H:i" }}</p> {% endcomment %}
+
 {% endfor %}
+</div>
 
 {% endblock content %}

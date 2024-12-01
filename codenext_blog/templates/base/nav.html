@@ -1,24 +1,32 @@
-<ul class="nav nav-tabs d-flex">
-    <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="{% url "all_blogs" %}">Homepage</a>
-    </li>
+<ul class="nav nav-tabs d-flex justify-content-between">
     {% if user.is_authenticated %}
-    <li class="nav-item">
-        <a class="nav-link active" href="{% url "create_blog" %}">Create blog</a>
-    </li>
+    <div class="d-flex justify-content">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'all_blogs' %} active {% endif %}" aria-current="page" href="{% url "all_blogs" %}">Homepage</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'create_blog' %} active {% endif %}" href="{% url "create_blog" %}">Create blog</a>
+        </li>
+    </div>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Account</a>
+        <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'profile' %} active {% endif %}" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Account</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url "profile" %}">Profile</a></li>
             <li><a class="dropdown-item" href="{% url "logout" %}">Logout</a></li>
         </ul>
     </li>
     {% else %}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url "login" %}">Login</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url "register" %}">Register</a>
-    </li>
+    <div class="d-flex justify-content">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'all_blogs' %} active {% endif %}" aria-current="page" href="{% url "all_blogs" %}">Homepage</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
+        </li>
+    </div>
     {% endif %}
 </ul>
