@@ -31,7 +31,7 @@ class Category(models.Model):
 
 
 class Blog(models.Model):
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='blogs')
     categories = models.ManyToManyField(Category)
 
     title = models.CharField(max_length=50)
@@ -45,5 +45,9 @@ class Blog(models.Model):
         except:
             return f'null <---> {self.title}'
 
+# user = User.objects.get(id=1)
+# user.blogs.all()
+
+# Blog.objects.filter(author=user)
 # auto_now=True (Hər save metodu çağrıldığında yenilənir.)
 # auto_now_add=True (İlk yaradılan zaman olan tarixi götürür.)

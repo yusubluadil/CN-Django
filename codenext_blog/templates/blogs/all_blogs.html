@@ -16,7 +16,6 @@
 {% endif %}
 
 
-
 <div class="row">
 {% for blog in blogs %}
 <div class="col mt-5">
@@ -29,6 +28,10 @@
         <div class="card-body">
             <h5 class="card-title">{{ blog.title }}</h5>
             <p class="card-text">{{ blog.about }}</p>
+            <h5 class="card-title">{{ blog.author.username }}</h5>
+            {% for category in blog.categories.all %}
+            <p class="card-text">{{ category.name }}</p>
+            {% endfor %}
             <a href="{% url "detail_blog" blog.id %}" class="btn btn-primary">Ətraflı</a>
         </div>
     </div>

@@ -9,11 +9,15 @@ from django.shortcuts import (
 from blogs.models import Blog
 from blogs.forms import BlogForm
 
+# select_related -> OneToOneField and ForeignKey
+# prefetch_related -> ManyToManyField and Reverse relation
+
 
 def all_blogs(request):
-    blogs = Blog.objects.all() # SELECT * FROM blogs_blog
+    blogs = Blog.objects.select_related('author').prefetch_related('categories')
+
     context = {
-        'blogs': blogs
+        'blogs': blogs,
     }
     return render(request, 'blogs/all_blogs.html', context)
 
