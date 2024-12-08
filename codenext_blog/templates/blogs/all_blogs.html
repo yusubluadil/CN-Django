@@ -32,7 +32,15 @@
             {% for category in blog.categories.all %}
             <p class="card-text">{{ category.name }}</p>
             {% endfor %}
-            <a href="{% url "detail_blog" blog.id %}" class="btn btn-primary">Ətraflı</a>
+            <div class="d-flex">
+                <a href="{% url "detail_blog" blog.id %}" class="btn btn-primary">Ətraflı</a>
+                {% if blog.author == user %}
+                <form action="{% url "delete_blog" blog.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger ms-2">Sil</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
