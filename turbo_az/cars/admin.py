@@ -83,3 +83,10 @@ class AnnouncementImageAdmin(admin.ModelAdmin):
     list_display = ('id', 'announcement')
     list_filter = ('announcement',)
     list_per_page = 25
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'brand')
+    # search_fields = ('name',)
+    list_per_page = 25

@@ -2,9 +2,34 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from cars.models import Announcement, AnnouncementImage, Brand
+from cars.models import (
+    Announcement,
+    AnnouncementImage,
+    Brand,
+    CarModel,
+    RoofType,
+    Color,
+    CarModel,
+    FuelType,
+    EngineCapacity,
+    ForCountry,
+    CarSupply,
+    Gearbox
+)
 
-from .serializers import CreateAnnouncementSerializer, ListBrandSerializer
+from .serializers import (
+    CreateAnnouncementSerializer,
+    ListBrandSerializer,
+    ListModelSerializer,
+    ListRoofTypeSerializer,
+    ListColorSerializer,
+    ListFuelTypeSerializer,
+    ListEngineCapacitySerializer,
+    ListForCountrySerializer,
+    ListCarSupplySerializer,
+    ListGearboxSerializer
+    
+)
 from .services.announcement_service import create_announcement
 
 
@@ -14,6 +39,7 @@ class CreateAnnouncementAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
+        print(request.headers)
         user = request.user
         images = request.FILES.getlist('images')
         car_supply = [int(i) for i in request.data.pop('car_supply')[0].split(',')]
@@ -32,3 +58,43 @@ class CreateAnnouncementAPIView(generics.CreateAPIView):
 class ListBrandAPIView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = ListBrandSerializer
+
+
+class ListModelAPIView(generics.ListAPIView):
+    queryset = CarModel.objects.all()
+    serializer_class = ListModelSerializer
+
+
+class ListRoofTypeAPIView(generics.ListAPIView):
+    queryset = RoofType.objects.all()
+    serializer_class = ListRoofTypeSerializer
+
+
+class ListColorAPIView(generics.ListAPIView):
+    queryset = Color.objects.all()
+    serializer_class = ListColorSerializer
+
+
+class ListFuelTypeAPIView(generics.ListAPIView):
+    queryset = FuelType.objects.all()
+    serializer_class = ListFuelTypeSerializer
+
+
+class ListEngineCapacityAPIView(generics.ListAPIView):
+    queryset = EngineCapacity.objects.all()
+    serializer_class = ListEngineCapacitySerializer
+
+
+class ListForCountryAPIView(generics.ListAPIView):
+    queryset = ForCountry.objects.all()
+    serializer_class = ListForCountrySerializer
+
+
+class ListCarSupplyAPIView(generics.ListAPIView):
+    queryset = CarSupply.objects.all()
+    serializer_class = ListCarSupplySerializer
+
+
+class ListGearboxAPIView(generics.ListAPIView):
+    queryset = Gearbox.objects.all()
+    serializer_class = ListGearboxSerializer
