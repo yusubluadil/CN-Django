@@ -6,12 +6,20 @@ from rest_framework.exceptions import ValidationError
 
 from cars.models import Announcement
 
+from ..models import City
+
 
 USER = get_user_model()
 
 # required=False - Field adı verilməsə belə xəta verməyəcək.
 # allow_null=True - Field adı mütləq verilməlidir, sadəcə null dəyər də qəbul edə bilir.
 # write_only=True - Yalnız DB-yə əlavə olunduğu zaman məlumat ötürülməli field olur. Yəni, get sorğularında görünmür
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -48,3 +56,11 @@ class MeSerializer(serializers.ModelSerializer):
 
     # def get_city_name(self, obj):
     #     return obj.
+
+
+class UserSerializer(serializers.ModelSerializer):
+    city = CitySerializer(read_only=True)
+
+    class Meta:
+        model = USER
+        fields = ('id', 'first_name', 'city', 'phone_number')

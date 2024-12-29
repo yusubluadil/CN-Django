@@ -61,6 +61,7 @@ class Announcement(TrackingModel):
     # user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='announcements') # Bəzi hallarda circular import xətası çıxır.
     # user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='announcements')
     user = models.ForeignKey(USER, on_delete=models.CASCADE, related_name='announcements')
+    city = models.ForeignKey('accounts.City', on_delete=models.SET_NULL, related_name='announcements', null=True)
 
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='announcements')
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name='announcements')
@@ -82,8 +83,13 @@ class Announcement(TrackingModel):
     is_crashed = models.BooleanField(default=False) # Vuruğu var
     is_damaged = models.BooleanField(default=False) # Qəzalı və ya ehtiyat hissələr üçün
     is_colored = models.BooleanField(default=False)
+    is_new = models.BooleanField(default=False)
+
     with_credit = models.BooleanField(default=False)
     barter = models.BooleanField(default=False)
+
+    is_vip = models.BooleanField(default=False)
+    is_showroom = models.BooleanField(default=False)
 
     mileage = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(1000000)])
     price = models.DecimalField(max_digits=8, decimal_places=0)
@@ -94,7 +100,9 @@ class Announcement(TrackingModel):
     vin_code = models.CharField(max_length=17, validators=[MinLengthValidator(17)])
     info = models.TextField(null=True, blank=True)
 
+    number_of_views = models.IntegerField(default=0)
+
 
 class AnnouncementImage(models.Model):
-    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='announcement_images')
     image = models.ImageField(upload_to='announcements')

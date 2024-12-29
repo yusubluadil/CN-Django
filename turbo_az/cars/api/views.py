@@ -17,6 +17,7 @@ from cars.models import (
     Gearbox
 )
 
+from .filters import AnnouncementFilter
 from .serializers import (
     CreateAnnouncementSerializer,
     ListBrandSerializer,
@@ -27,8 +28,9 @@ from .serializers import (
     ListEngineCapacitySerializer,
     ListForCountrySerializer,
     ListCarSupplySerializer,
-    ListGearboxSerializer
-    
+    ListGearboxSerializer,
+    ListAnnouncementSerializer,
+    DetailAnnouncementSerializer
 )
 from .services.announcement_service import create_announcement
 
@@ -53,6 +55,26 @@ class CreateAnnouncementAPIView(generics.CreateAPIView):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ListAnnouncementAPIView(generics.ListAPIView):
+    queryset = Announcement.objects.select_related('brand', 'car_model', 'engine_capacity', 'city')
+    serializer_class = ListAnnouncementSerializer
+    filterset_class = AnnouncementFilter
+
+
+class DetailAnnouncementAPIView(generics.RetrieveAPIView):
+    queryset = Announcement.objects.select_related(
+        'brand', 'car_model', 'roof_type', 'color', 'fuel_type', 'engine_capacity',
+        'for_country', 'gearbox', 'city', 'user'
+    ).prefetch_related(
+        'car_supply'
+    )
+    serializer_class = DetailAnnouncementSerializer
+
+    def get(self, request, *args, **kwargs):
+        print(id(request.user))
+        return super().get(request, *args, **kwargs)
 
 
 class ListBrandAPIView(generics.ListAPIView):

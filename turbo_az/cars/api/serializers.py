@@ -1,5 +1,10 @@
 from rest_framework import serializers
 
+from accounts.api.serializers import (
+    CitySerializer,
+    UserSerializer
+)
+
 from cars.models import (
     Announcement,
     AnnouncementImage,
@@ -20,12 +25,6 @@ class AnnouncementImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnnouncementImage
         fields = ('image',)
-
-
-class CreateAnnouncementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Announcement
-        exclude = ('user', 'car_supply', 'created_at', 'updated_at')
 
 
 class ListBrandSerializer(serializers.ModelSerializer):
@@ -80,3 +79,62 @@ class ListGearboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gearbox
         fields = '__all__'
+
+
+class CreateAnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        exclude = ('user', 'car_supply', 'created_at', 'updated_at', 'is_vip', 'number_of_views')
+
+
+class ListAnnouncementSerializer(serializers.ModelSerializer):
+    frontal_image = serializers.SerializerMethodField()
+    brand = ListBrandSerializer(read_only=True)
+    car_model = ListModelSerializer(read_only=True)
+    engine_capacity = ListEngineCapacitySerializer(read_only=True)
+    city = CitySerializer(read_only=True)
+
+    class Meta:
+        model = Announcement
+        fields = (
+            'id', 'price', 'currency_type', 'brand', 'car_model',
+            'released_date', 'engine_capacity', 'mileage', 'mileage_type',
+            'city', 'created_at', 'frontal_image'
+        )
+
+    def get_frontal_image(self, obj):
+        frontal_image_obj = obj.announcement_images.first()
+        req = self.context['request']
+
+        try:
+            return req.build_absolute_uri(frontal_image_obj.image.url)
+        except:
+            return None
+
+
+class DetailAnnouncementSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    city = CitySerializer(read_only=True)
+    brand = ListBrandSerializer(read_only=True)
+    car_model = ListModelSerializer(read_only=True)
+    roof_type = ListRoofTypeSerializer(read_only=True)
+    color = ListColorSerializer(read_only=True)
+    fuel_type = ListFuelTypeSerializer(read_only=True)
+    engine_capacity = ListEngineCapacitySerializer(read_only=True)
+    for_country = ListForCountrySerializer(read_only=True)
+    gearbox = ListGearboxSerializer(read_only=True)
+
+    car_supply = ListCarSupplySerializer(read_only=True, many=True)
+    announcement_images = AnnouncementImageSerializer(read_only=True, many=True)
+
+    number_of_views = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Announcement
+        fields = '__all__'
+
+    def get_number_of_views(self, obj):
+        obj.number_of_views += 1
+        obj.save()
+
+        return obj.number_of_views
