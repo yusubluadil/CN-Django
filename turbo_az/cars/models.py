@@ -84,6 +84,7 @@ class Announcement(TrackingModel):
     is_damaged = models.BooleanField(default=False) # Qəzalı və ya ehtiyat hissələr üçün
     is_colored = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
+    is_dealer = models.BooleanField(default=False)
 
     with_credit = models.BooleanField(default=False)
     barter = models.BooleanField(default=False)
@@ -106,3 +107,11 @@ class Announcement(TrackingModel):
 class AnnouncementImage(models.Model):
     announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, related_name='announcement_images')
     image = models.ImageField(upload_to='announcements')
+
+
+class FavoriteAnnouncement(models.Model):
+    user = models.ForeignKey(USER, on_delete=models.CASCADE, related_name='favorite_announcements')
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-pk',)

@@ -7,6 +7,7 @@ from accounts.api.serializers import (
 
 from cars.models import (
     Announcement,
+    FavoriteAnnouncement,
     AnnouncementImage,
     Brand,
     CarModel,
@@ -138,3 +139,21 @@ class DetailAnnouncementSerializer(serializers.ModelSerializer):
         obj.save()
 
         return obj.number_of_views
+
+
+class CreateFavoriteAnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteAnnouncement
+        fields = ('announcement',)
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
+
+class ListFavoriteAnnouncementSerializer(serializers.ModelSerializer):
+    announcement = ListAnnouncementSerializer()
+
+    class Meta:
+        model = FavoriteAnnouncement
+        fields = ('announcement',)

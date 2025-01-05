@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from cars.models import (
     Announcement,
+    FavoriteAnnouncement,
     AnnouncementImage,
     Brand,
     CarModel,
@@ -20,6 +21,8 @@ from cars.models import (
 from .filters import AnnouncementFilter
 from .serializers import (
     CreateAnnouncementSerializer,
+    CreateFavoriteAnnouncementSerializer,
+    ListFavoriteAnnouncementSerializer,
     ListBrandSerializer,
     ListModelSerializer,
     ListRoofTypeSerializer,
@@ -120,3 +123,25 @@ class ListCarSupplyAPIView(generics.ListAPIView):
 class ListGearboxAPIView(generics.ListAPIView):
     queryset = Gearbox.objects.all()
     serializer_class = ListGearboxSerializer
+
+
+class CreateFavoriteAnnouncementAPIView(generics.CreateAPIView):
+    queryset = Announcement.objects.all()
+    serializer_class = CreateFavoriteAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ListFavoriteAnnouncementAPIView(generics.ListAPIView):
+    serializer_class = ListFavoriteAnnouncementSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = self.request.user.favorite_announcements.select_related('announcement')
+        return queryset

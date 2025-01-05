@@ -11,6 +11,7 @@ from .models import (
     CarSupply,
     Gearbox,
     Announcement,
+    FavoriteAnnouncement,
     AnnouncementImage,
 )
 
@@ -90,3 +91,10 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('id', 'brand')
     # search_fields = ('name',)
     list_per_page = 25
+
+
+@admin.register(FavoriteAnnouncement)
+class FavoriteAnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'announcement')
+    list_filter = ('announcement', 'user')
+    list_per_page = 50
